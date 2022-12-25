@@ -14,12 +14,12 @@ namespace CMSApplication.Controllers
     public class QuizController : ControllerBase
     {
         private readonly IQuizService _quizService;
-        private readonly ILogger<EmployeeController> _logger;
+        private readonly ILogger<QuizController> _logger;
 
         public QuizController
         (
             IQuizService quizService,
-            ILogger<EmployeeController> logger
+            ILogger<QuizController> logger
         )
         {
             _quizService = quizService;

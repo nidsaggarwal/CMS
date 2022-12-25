@@ -64,8 +64,8 @@ builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddSingleton<IExcelService, ExcelService>();
 builder.Services.AddSingleton<IFileService, FileService>(); 
-builder.Services.AddSingleton<IQuizService, QuizService>();
-builder.Services.AddSingleton<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IQuizService, QuizService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 
 
