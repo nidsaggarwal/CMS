@@ -20,13 +20,17 @@ namespace CMSApplication.Data.Configs
             builder.Property(x => x.BaseLocation).IsRequired().HasMaxLength(100);
             builder.Property(x => x.ContactNo).IsRequired().HasMaxLength(20);
             builder.Property(x => x.PrimarySkill).IsRequired();
-            builder.Property(x => x.Feedback).HasMaxLength(100);
+            builder.Property(x => x.Feedback).IsRequired(false).HasMaxLength(100);
+            builder.Property(x => x.ProfileFile).IsRequired(false);
 
-            builder
-                .HasOne(x => x.User)
+            //builder
+            //    .HasOne(x => x.User)
+            //    .WithOne(x => x.Employee)
+            //    .HasForeignKey<User>(x => x.Id);
+
+            builder.HasMany(x => x.Workings)
                 .WithOne(x => x.Employee)
-                .HasForeignKey<User>(x => x.Id);
-
+                .HasForeignKey(x => x.EmployeeId);
         }
     }
 }

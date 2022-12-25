@@ -41,6 +41,11 @@ namespace CMSApplication.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.ApplyConfiguration(new ApplicationRoleConfig());
+            builder.ApplyConfiguration(new UserConfig());
+            builder.ApplyConfiguration(new UserRoleConfig());
+
             builder.ApplyConfiguration(new EmployeeConfig());
             builder.ApplyConfiguration(new WorkingConfig());
             builder.ApplyConfiguration(new InternalEvaluationConfig());

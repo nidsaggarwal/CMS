@@ -8,9 +8,13 @@ namespace CMSApplication.Data.Configs
     {
         public void Configure(EntityTypeBuilder<UserRole> builder)
         {
+            //builder
+            //    .HasKey(x => x.Id)
+            //    ;
 
-            //builder.Ignore(x => x.RoleId);
-            //builder.Ignore(x => x.UserId);
+            builder
+                .Property(x => x.Id).ValueGeneratedOnAdd();
+
 
             builder
                 .HasOne(x => x.AppRole)
@@ -20,11 +24,7 @@ namespace CMSApplication.Data.Configs
             builder.HasOne(x => x.userRole)
                 .WithMany(x => x.UserRoles)
                 .HasForeignKey(x => x.UserId);
-
-            builder
-                .Ignore(x => x.CreatedDate)
-                .Ignore(x => x.ModifiedDate)
-                ;
+             
         }
     }
 }

@@ -12,12 +12,12 @@ namespace CMSApplication.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             foreach (var role in UserRole.Admin.GetEnumValues())
-              
+
                 migrationBuilder.InsertData(
                     table: "AspNetRoles",
-                    columns: new[] { "CreatedDate", "Name", "NormalizedName" },
-                    values: new object[] { DateTime.Now,  role.ToString(), role.ToString() }
-                    );
+                    columns: new[] { "Name", "NormalizedName" },
+                    values: new object[] { role.ToString(), role.ToString() }
+                );
 
         }
 

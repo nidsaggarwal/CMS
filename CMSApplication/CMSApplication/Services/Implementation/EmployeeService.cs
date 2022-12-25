@@ -3,6 +3,7 @@ using CMSApplication.Data.Entity;
 using CMSApplication.Models.BindingModel;
 using CMSApplication.Models.DTO;
 using CMSApplication.Services.Abstraction;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CMSApplication.Services.Implementation
@@ -10,9 +11,12 @@ namespace CMSApplication.Services.Implementation
     public class EmployeeService : IEmployeeService
     {
         private readonly DBContext _context;
-        public EmployeeService(DBContext context)
+        private readonly UserManager<User> _userManager;
+
+        public EmployeeService(DBContext context,UserManager<User> userManager )
         {
             _context = context;
+            _userManager = userManager;
         }
         public async Task AddEmployees(List<EmployeeDTO> employees)
         {
@@ -22,8 +26,21 @@ namespace CMSApplication.Services.Implementation
 
                 foreach (var item in employees)
                 {
+                    var user = new User()
+                    {
+                        Email = item.Email,
+                        UserName = item.Email,
+                        EmailConfirmed = true,
+                        FullName = item.FirstName + " " + item.LastName
+                    };
+
+                    var result = await _userManager.CreateAsync(user, "123456789");
+                    if (result.Succeeded)
+                        await _userManager.AddToRoleAsync(user, Enums.UserRole.User.ToString());
+
                     Employee obj = new Employee()
                     {
+                        Id = user.Id,
                         EmployeeId = item.EmployeeId,
                         FirstName = item.FirstName,
                         LastName = item.LastName,
@@ -34,7 +51,11 @@ namespace CMSApplication.Services.Implementation
                         Technology = item.Technology,
                         PrimarySkill = item.PrimarySkill,
                         SecondarySkill = item.SecondarySkill,
+                        CreatedDate = DateTime.Now,
                     };
+
+                    user.Employee = obj;
+
                     obj.Workings = new List<Working>();
                     obj.Workings.Add(new Working()
                     {
@@ -44,10 +65,14 @@ namespace CMSApplication.Services.Implementation
                     });
                     objs.Add(obj);
                 }
+
                 await _context.Employees.AddRangeAsync(objs);
                 await _context.SaveChangesAsync();
             }
-            catch { throw; }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<bool> RateEmployee(EmployeeRatingDto dto)

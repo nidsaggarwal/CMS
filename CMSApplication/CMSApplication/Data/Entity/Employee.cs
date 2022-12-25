@@ -15,9 +15,9 @@ namespace CMSApplication.Data.Entity
         public string Technology { get; set; }
         public string PrimarySkill { get; set; }
         public string SecondarySkill { get; set; }
-        public string Feedback { get; set; }
+        public string? Feedback { get; set; }
         public int Rating { get; set; }
-        public string ProfileFile { get; set; }
+        public string? ProfileFile { get; set; }
 
         public User User { get; set; }
 

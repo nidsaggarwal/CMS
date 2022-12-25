@@ -11,8 +11,12 @@ namespace CMSApplication.Data.Configs
             builder
                 .HasKey(x => x.Id)
                 ;
+
+            
             builder
                 .Property(x => x.Id).ValueGeneratedOnAdd();
+
+
 
             // removed unnesserry fields
 
@@ -27,7 +31,11 @@ namespace CMSApplication.Data.Configs
                 .Ignore(x => x.TwoFactorEnabled)
                 .Ignore(x=>x.PhoneNumber)
                 ;
-             
+
+            builder
+                .HasOne(x => x.Employee)
+                .WithOne(x => x.User)
+                .HasForeignKey<Employee>(x => x.Id);
         }
     }
 }

@@ -34,12 +34,6 @@ namespace CMSApplication.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -121,7 +115,6 @@ namespace CMSApplication.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Feedback")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -143,7 +136,6 @@ namespace CMSApplication.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfileFile")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Rating")
@@ -197,14 +189,10 @@ namespace CMSApplication.Migrations
             modelBuilder.Entity("CMSApplication.Data.Entity.User", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -213,25 +201,12 @@ namespace CMSApplication.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
@@ -240,26 +215,14 @@ namespace CMSApplication.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
@@ -277,28 +240,21 @@ namespace CMSApplication.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<int>("AppRoleId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("userRoleId")
-                        .HasColumnType("int");
-
                     b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("AppRoleId");
-
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("userRoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
@@ -344,6 +300,17 @@ namespace CMSApplication.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("CMSApplication.Data.Entity.Employee", b =>
+                {
+                    b.HasOne("CMSApplication.Data.Entity.User", "User")
+                        .WithOne("Employee")
+                        .HasForeignKey("CMSApplication.Data.Entity.Employee", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CMSApplication.Data.Entity.InternalEvaluation", b =>
                 {
                     b.HasOne("CMSApplication.Data.Entity.Employee", "Employee")
@@ -355,40 +322,17 @@ namespace CMSApplication.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("CMSApplication.Data.Entity.User", b =>
-                {
-                    b.HasOne("CMSApplication.Data.Entity.Employee", "Employee")
-                        .WithOne("User")
-                        .HasForeignKey("CMSApplication.Data.Entity.User", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-                });
-
             modelBuilder.Entity("CMSApplication.Data.Entity.UserRole", b =>
                 {
                     b.HasOne("CMSApplication.Data.Entity.ApplicationRole", "AppRole")
                         .WithMany("UserRoles")
-                        .HasForeignKey("AppRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CMSApplication.Data.Entity.ApplicationRole", null)
-                        .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CMSApplication.Data.Entity.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CMSApplication.Data.Entity.User", "userRole")
                         .WithMany("UserRoles")
-                        .HasForeignKey("userRoleId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -402,7 +346,7 @@ namespace CMSApplication.Migrations
                     b.HasOne("CMSApplication.Data.Entity.Employee", "Employee")
                         .WithMany("Workings")
                         .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Employee");
@@ -419,14 +363,14 @@ namespace CMSApplication.Migrations
 
                     b.Navigation("InternalEvaluations");
 
-                    b.Navigation("User")
-                        .IsRequired();
-
                     b.Navigation("Workings");
                 });
 
             modelBuilder.Entity("CMSApplication.Data.Entity.User", b =>
                 {
+                    b.Navigation("Employee")
+                        .IsRequired();
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
