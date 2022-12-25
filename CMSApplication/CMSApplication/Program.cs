@@ -49,9 +49,6 @@ builder.Services.AddIdentity<User, ApplicationRole>(options =>
 
 
     })
-
-//builder.Services.AddIdentity<User, ApplicationRole>( )
-
     .AddClaimsPrincipalFactory<MyClaimFactory<User>>()
     .AddEntityFrameworkStores<DBContext>()
     .AddDefaultTokenProviders()
@@ -66,8 +63,7 @@ builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddSingleton<IExcelService, ExcelService>();
-builder.Services.AddSingleton<IFileService, FileService>();
-//builder.Services.AddIdentity<User, IdentityRole>(opt => { }).AddEntityFrameworkStores<DBContext>();
+builder.Services.AddSingleton<IFileService, FileService>(); 
 
 
 

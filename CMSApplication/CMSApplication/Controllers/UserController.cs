@@ -21,11 +21,11 @@ namespace CMSApplication.Controllers
         private readonly ILogger<UserController> _logger;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly JWTConfig _jWTConfig;
         private readonly IJwtProvider _jwtProvider;
 
-        public UserController(ILogger<UserController> logger, UserManager<User> userManager, SignInManager<User> signManager, IOptions<JWTConfig> jwtConfig, RoleManager<IdentityRole> roleManager, IJwtProvider jwtProvider)
+        public UserController(ILogger<UserController> logger, UserManager<User> userManager, SignInManager<User> signManager, IOptions<JWTConfig> jwtConfig, RoleManager<ApplicationRole> roleManager, IJwtProvider jwtProvider)
         {
             _userManager = userManager;
             _signInManager = signManager;
@@ -185,8 +185,9 @@ namespace CMSApplication.Controllers
                     return await Task.FromResult(new ResponseModel(ResponseCode.OK, "Role already exist", null));
 
                 }
-                var role = new IdentityRole();
+                var role = new ApplicationRole();
                 role.Name = model.Role;
+                role.NormalizedName = model.Role;
                 var result = await _roleManager.CreateAsync(role);
                 if (result.Succeeded)
                 {
