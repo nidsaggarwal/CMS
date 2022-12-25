@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using System.Threading;
+using Category = CMSApplication.Data.Entity.Category;
 
 namespace CMSApplication.Data
 {
@@ -31,6 +32,8 @@ namespace CMSApplication.Data
 
         }
 
+        public virtual DbSet<Quiz> Quizzes { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Working> Workings { get; set; }
         public virtual DbSet<InternalEvaluation> InternalEvaluations { get; set; }
@@ -45,6 +48,9 @@ namespace CMSApplication.Data
             builder.ApplyConfiguration(new ApplicationRoleConfig());
             builder.ApplyConfiguration(new UserConfig());
             builder.ApplyConfiguration(new UserRoleConfig());
+
+            builder.ApplyConfiguration(new QuizConfig());
+            builder.ApplyConfiguration(new CategoryConfig());
 
             builder.ApplyConfiguration(new EmployeeConfig());
             builder.ApplyConfiguration(new WorkingConfig());
