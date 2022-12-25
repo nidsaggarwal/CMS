@@ -62,7 +62,7 @@ namespace CMSApplication.Services.Implementation
             try
             {
                 var obj = await _context.Quizzes.Where(x=>x.Id== quizId).FirstOrDefaultAsync();
-                if (obj == null) throw new Exception("Employee does not exist");
+                if (obj == null) throw new Exception("Quiz does not exist");
                 return obj;
             }
             catch (Exception e)
