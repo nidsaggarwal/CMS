@@ -108,7 +108,7 @@ namespace CMSApplication.Controllers
 
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{Id}")]
         public async Task<object> Delete(long Id)
         {
             try

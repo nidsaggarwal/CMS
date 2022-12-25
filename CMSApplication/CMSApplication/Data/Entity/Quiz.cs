@@ -10,6 +10,6 @@
 
         public long CategorId { get; set; }
 
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
     }
 }
