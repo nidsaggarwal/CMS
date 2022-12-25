@@ -3,25 +3,35 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CMSApplication.Data.Entity
 {
-    public class BaseEntity<TKey> : BaseEntity where TKey : struct
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public virtual TKey Id { get; set; }
-
-
-
-    }
 
     public interface IBaseEntity
     {
-        DateTime CreatedAt { get; set; }
-        DateTime? ModifiedAt { get; set; }
+        object Id { get; set; }
+        DateTime CreatedDate { get; set; }
+        DateTime? ModifiedDate { get; set; }
+    }
+    public interface IBaseEntity<T> : IBaseEntity
+    {
+        new T Id { get; set; }
     }
 
-    public abstract class BaseEntity : IBaseEntity
+    public abstract class BaseEntity<T> : IBaseEntity<T>
     {
-        public DateTime CreatedAt { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public DateTime? ModifiedAt { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        [Key]
+        public T Id { get; set; }
+        private DateTime? createdDate = null;
+
+        object IBaseEntity.Id
+        {
+            get => this.Id;
+            set => Id = (T)Convert.ChangeType(value, typeof(T));
+        }
+        public DateTime CreatedDate
+        {
+            get => createdDate ?? DateTime.Now;
+            set => createdDate = DateTime.Now;
+        }
+
+        public DateTime? ModifiedDate { get; set; }
     }
 }

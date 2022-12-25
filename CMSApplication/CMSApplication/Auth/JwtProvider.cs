@@ -21,7 +21,7 @@ namespace CMSApplication.Auth
         public string GenerateToken (User user, List<string> roles)
         {
             var claims = new List<System.Security.Claims.Claim>(){
-            new System.Security.Claims.Claim(JwtRegisteredClaimNames.NameId,user.Id),
+            new System.Security.Claims.Claim(JwtRegisteredClaimNames.NameId,user.Id.ToString()),
                new System.Security.Claims.Claim(JwtRegisteredClaimNames.Email,user.Email),
                new System.Security.Claims.Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
            };

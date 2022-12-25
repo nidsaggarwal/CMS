@@ -12,8 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OpenXmlPowerTools;
 using System.Reflection;
-
-
+using CMSApplication.Identity;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,11 +26,37 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 string connectionString = builder.Configuration.GetConnectionString("Database")!;
 
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>, MyClaimFactory<User>>();
+
+
 builder.Services.AddDbContext<DBContext>(
     (sp, optionsBuilder) =>
     {
         optionsBuilder.UseSqlServer(connectionString);
     });
+
+builder.Services.AddIdentity<User, ApplicationRole>(options =>
+    {
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredLength = 6;
+
+        options.SignIn.RequireConfirmedAccount = false;
+        options.SignIn.RequireConfirmedEmail = false;
+        options.SignIn.RequireConfirmedPhoneNumber = false;
+
+
+    })
+
+//builder.Services.AddIdentity<User, ApplicationRole>( )
+
+    .AddClaimsPrincipalFactory<MyClaimFactory<User>>()
+    .AddEntityFrameworkStores<DBContext>()
+    .AddDefaultTokenProviders()
+    ;
+
 
 builder.Services.AddSwaggerGen();
 
@@ -41,9 +67,12 @@ builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddSingleton<IExcelService, ExcelService>();
 builder.Services.AddSingleton<IFileService, FileService>();
-builder.Services.AddIdentity<User, IdentityRole>(opt => { }).AddEntityFrameworkStores<DBContext>();
+//builder.Services.AddIdentity<User, IdentityRole>(opt => { }).AddEntityFrameworkStores<DBContext>();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer();
 
 var app = builder.Build();

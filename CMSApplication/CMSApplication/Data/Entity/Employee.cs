@@ -2,7 +2,7 @@
 
 namespace CMSApplication.Data.Entity
 {
-    public class Employee :BaseEntity<int>
+    public class Employee : BaseEntity<int>
     {
         [Required]
         public string EmployeeId { get; set; }
@@ -18,6 +18,9 @@ namespace CMSApplication.Data.Entity
         public string Feedback { get; set; }
         public int Rating { get; set; }
         public string ProfileFile { get; set; }
+
+        public User User { get; set; }
+
         public virtual ICollection<Working> Workings { get; set; }
         public virtual ICollection<InternalEvaluation> InternalEvaluations { get; set; }
         public virtual ICollection<ClientEvaluation> ClientEvaluations { get; set; }

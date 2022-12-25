@@ -6,11 +6,25 @@ using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 using System.Threading;
 
 namespace CMSApplication.Data
 {
-    public class DBContext : IdentityDbContext<User,IdentityRole,string>
+    public class DBContext //: IdentityDbContext<User,IdentityRole,string>
+
+        : IdentityDbContext
+            //<UserAccount,  ApplicationRole, int,
+            <   User,
+                ApplicationRole,
+                int,
+                IdentityUserClaim<int>, // TUserClaim
+                UserRole,               // TUserRole,
+                IdentityUserLogin<int>, // TUserLogin
+                IdentityRoleClaim<int>, // TRoleClaim
+                IdentityUserToken<int>  // TUserToken
+            >
+
     {
         public DBContext(DbContextOptions options): base(options)
         {
@@ -31,6 +45,11 @@ namespace CMSApplication.Data
             builder.ApplyConfiguration(new WorkingConfig());
             builder.ApplyConfiguration(new InternalEvaluationConfig());
             builder.ApplyConfiguration(new ClientEvaluationConfig());
+
+            builder.Ignore<IdentityUserLogin<int>>();
+            builder.Ignore<IdentityUserClaim<int>>();
+            builder.Ignore<IdentityRoleClaim<int>>();
+            builder.Ignore<IdentityUserToken<int>>();
         }
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -45,12 +64,12 @@ namespace CMSApplication.Data
                     {
                         case EntityState.Modified:
                             {
-                                item.Property(nameof(IBaseEntity.ModifiedAt)).CurrentValue = now;
+                                item.Property(nameof(IBaseEntity.ModifiedDate)).CurrentValue = now;
                             }
                             break;
                         case EntityState.Added:
                             {
-                                item.Property(nameof(IBaseEntity.CreatedAt)).CurrentValue = now;
+                                item.Property(nameof(IBaseEntity.CreatedDate)).CurrentValue = now;
                             }
                             break;
                         default:

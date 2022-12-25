@@ -2,22 +2,19 @@
 
 namespace CMSApplication.Data.Entity
 {
-    public class User : IdentityUser<int>, IBaseEntity<int>
+    public class UserRole : IdentityUserRole<int>, IBaseEntity<int>
     {
-
-        public string FullName { get; set; }
-         
         object IBaseEntity.Id
         {
-            get => this.Id;
+            get => Id;
             set => Id = (int)Convert.ChangeType(value, typeof(int));
         }
 
+        public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
 
-        public ICollection<UserRole> UserRoles { get; set; }
-
-        public Employee Employee { get; set; }
+        public User             userRole { get; set; }
+        public ApplicationRole  AppRole { get; set; }
     }
 }

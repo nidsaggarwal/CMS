@@ -4,11 +4,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CMSApplication.Data.Configs
 {
-    public class EmployeeConfig :IEntityTypeConfiguration<Employee>
+    public class EmployeeConfig : IEntityTypeConfiguration<Employee>
     {
        public void Configure(EntityTypeBuilder<Employee> builder)
         {
-            builder.HasKey(x => x.Id);
+            builder
+                .HasKey(x => x.Id);
+            builder
+                .Property(x => x.Id).ValueGeneratedNever();
+
             builder.Property(x => x.FirstName).IsRequired().HasMaxLength(100);
             builder.Property(x => x.LastName).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Email).IsRequired().HasMaxLength(255);
@@ -17,6 +21,12 @@ namespace CMSApplication.Data.Configs
             builder.Property(x => x.ContactNo).IsRequired().HasMaxLength(20);
             builder.Property(x => x.PrimarySkill).IsRequired();
             builder.Property(x => x.Feedback).HasMaxLength(100);
+
+            builder
+                .HasOne(x => x.User)
+                .WithOne(x => x.Employee)
+                .HasForeignKey<User>(x => x.Id);
+
         }
     }
 }

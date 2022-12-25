@@ -56,7 +56,7 @@ namespace CMSApplication.Controllers
                 }
 
 
-                var user = new User() { FullName = model.FullName, Email = model.Email, UserName = model.Email, DateCreated = DateTime.UtcNow, DateModified = DateTime.UtcNow };
+                var user = new User() { FullName = model.FullName, Email = model.Email, UserName = model.Email, CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -88,7 +88,7 @@ namespace CMSApplication.Controllers
                 {
                     var roles = (await _userManager.GetRolesAsync(user)).ToList();
 
-                    allUserDTO.Add(new UserDTO(user.FullName, user.Email, user.UserName, user.DateCreated, roles));
+                    allUserDTO.Add(new UserDTO(user.FullName, user.Email, user.UserName, user.CreatedDate, roles));
                 }
                 return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", allUserDTO));
             }
@@ -111,7 +111,7 @@ namespace CMSApplication.Controllers
                     var role = (await _userManager.GetRolesAsync(user)).ToList();
                     if (role.Any(x => x == "User"))
                     {
-                        allUserDTO.Add(new UserDTO(user.FullName, user.Email, user.UserName, user.DateCreated, role));
+                        allUserDTO.Add(new UserDTO(user.FullName, user.Email, user.UserName, user.CreatedDate, role));
                     }
                 }
                 return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", allUserDTO));
@@ -138,7 +138,7 @@ namespace CMSApplication.Controllers
                     {
                         var User = await _userManager.FindByEmailAsync(model.Email);
                         var roles = (await _userManager.GetRolesAsync(User)).ToList();
-                        var user = new UserDTO(User.FullName, User.Email, User.UserName, User.DateCreated, roles);
+                        var user = new UserDTO(User.FullName, User.Email, User.UserName, User.CreatedDate, roles);
                         user.Token = _jwtProvider.GenerateToken(User, roles);
 
                         return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", user));
