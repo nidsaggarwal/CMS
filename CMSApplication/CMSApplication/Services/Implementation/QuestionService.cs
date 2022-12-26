@@ -18,7 +18,7 @@ namespace CMSApplication.Services.Implementation
             await _context.Questions.AddAsync(question);
             await _context.SaveChangesAsync();
 
-            return quiz;
+            return question;
         }
 
         public async Task<Question> updateQuestion(Question question)

@@ -26,7 +26,7 @@ namespace CMSApplication.Data.Configs
                 .Ignore(x => x.EmailConfirmed)
                 .Ignore(x => x.LockoutEnabled)
                 .Ignore(x => x.LockoutEnd)
-                .Ignore(x => x.NormalizedEmail)
+                //.Ignore(x => x.NormalizedEmail)
                 .Ignore(x => x.PhoneNumberConfirmed)
                 .Ignore(x => x.TwoFactorEnabled)
                 .Ignore(x=>x.PhoneNumber)
