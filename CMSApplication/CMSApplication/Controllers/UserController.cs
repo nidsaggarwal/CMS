@@ -1,9 +1,11 @@
-﻿using CMSApplication.Auth;
+﻿using System.IdentityModel.Tokens.Jwt;
+using CMSApplication.Auth;
 using CMSApplication.Data.Entity;
 using CMSApplication.Enums;
 using CMSApplication.Models;
 using CMSApplication.Models.BindingModel;
 using CMSApplication.Models.DTO;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -34,6 +36,21 @@ namespace CMSApplication.Controllers
             _jWTConfig = jwtConfig.Value;
             _jwtProvider = jwtProvider;
 
+        }
+
+        [HttpGet("current-user")]
+        public async Task<object> getCurrentUser()
+        {
+            try
+            {
+                var email= HttpContext.User.Claims.Where(x => x.Type == JwtRegisteredClaimNames.Email).FirstOrDefault();
+                var user = _userManager.FindByEmailAsync(email.Value);
+                return user;
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
+            }
         }
 
         [HttpPost("RegisterUser")]
