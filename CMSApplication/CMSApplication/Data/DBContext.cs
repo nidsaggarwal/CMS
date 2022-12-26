@@ -36,6 +36,9 @@ namespace CMSApplication.Data
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Working> Workings { get; set; }
+        public virtual DbSet<Question> Questions { get; set; }
+
+
         public virtual DbSet<InternalEvaluation> InternalEvaluations { get; set; }
         public virtual DbSet<ClientEvaluation> ClientEvaluations { get; set; }
 
@@ -51,6 +54,7 @@ namespace CMSApplication.Data
 
             builder.ApplyConfiguration(new QuizConfig());
             builder.ApplyConfiguration(new CategoryConfig());
+            builder.ApplyConfiguration(new QuestionConfig());
 
             builder.ApplyConfiguration(new EmployeeConfig());
             builder.ApplyConfiguration(new WorkingConfig());

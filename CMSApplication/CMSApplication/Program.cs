@@ -66,6 +66,7 @@ builder.Services.AddSingleton<IExcelService, ExcelService>();
 builder.Services.AddSingleton<IFileService, FileService>(); 
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
 
 
 

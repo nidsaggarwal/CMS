@@ -9,9 +9,7 @@ namespace CMSApplication.Data.Configs
         public void Configure(EntityTypeBuilder<Quiz> builder)
         {
             builder
-                .HasKey(x => x.Id)
-                ;
-
+                .HasKey(x => x.Id);
 
             builder
                 .Property(x => x.Id).ValueGeneratedOnAdd();
@@ -21,7 +19,11 @@ namespace CMSApplication.Data.Configs
                 .IsRequired(false)
                 .HasMaxLength(5000);
 
-
+            builder
+                .HasMany(x => x.Questions)
+                .WithOne(x => x.Quiz)
+                .HasForeignKey(x => x.QuizID)
+                .IsRequired();
         }
     }
 }
