@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using CMSApplication.Auth;
 using CMSApplication.Data.Entity;
 using CMSApplication.Enums;
@@ -43,8 +44,8 @@ namespace CMSApplication.Controllers
         {
             try
             {
-                var email= HttpContext.User.Claims.Where(x => x.Type == JwtRegisteredClaimNames.Email).FirstOrDefault();
-                var user = _userManager.FindByEmailAsync(email.Value);
+                var email= HttpContext.User.Claims.Where(x => x.Type == "UserName").FirstOrDefault();
+                var user = await _userManager.FindByEmailAsync(email.Value);
                 return user;
             }
             catch (Exception ex)
