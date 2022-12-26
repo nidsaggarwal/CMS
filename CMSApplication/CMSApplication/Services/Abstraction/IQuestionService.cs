@@ -17,7 +17,6 @@ namespace CMSApplication.Services.Abstraction
          Task<List<Question>> getQuestionsOfQuiz(Quiz quiz);
 
          Task deleteQuestion(long quesId);
-
-         Task<Question> get(long questionsId);
+         
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CMSApplication.Data;
 using CMSApplication.Data.Entity;
 using CMSApplication.Services.Abstraction;
+using Microsoft.EntityFrameworkCore;
 
 namespace CMSApplication.Services.Implementation
 {
@@ -23,32 +24,36 @@ namespace CMSApplication.Services.Implementation
 
         public async Task<Question> updateQuestion(Question question)
         {
-            throw new NotImplementedException();
+            _context.Attach(question);
+            _context.Entry(question).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return question;
         }
 
         public async Task<List<Question>> getQuestions()
         {
-            throw new NotImplementedException();
+            return await _context.Questions.ToListAsync();
         }
 
         public async Task<Question> getQuestion(long questionId)
         {
-            throw new NotImplementedException();
+            var obj = await _context.Questions.Where(x => x.Id == questionId).FirstOrDefaultAsync();
+            if (obj == null) throw new Exception("Quiz does not exist");
+            return obj;
         }
 
         public async Task<List<Question>> getQuestionsOfQuiz(Quiz quiz)
         {
-            throw new NotImplementedException();
+            return await _context.Questions.Where(x=>x.QuizID== quiz.Id).ToListAsync();
         }
 
         public async Task deleteQuestion(long quesId)
         {
-            throw new NotImplementedException();
+            var question = new Question() { Id = quesId };
+            _context.Entry(question).State = EntityState.Deleted;
+            await _context.SaveChangesAsync();
         }
-
-        public async Task<Question> get(long questionsId)
-        {
-            throw new NotImplementedException();
-        }
+ 
     }
 }
