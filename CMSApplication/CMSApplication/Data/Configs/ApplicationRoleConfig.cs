@@ -16,10 +16,10 @@ namespace CMSApplication.Data.Configs
                 .Property(x => x.Id).ValueGeneratedOnAdd();
 
 
-            builder
-                .Ignore(x => x.CreatedDate)
-                .Ignore(x => x.ModifiedDate)
-                ;
+            //builder
+            //    .Ignore(x => x.CreatedDate)
+            //    .Ignore(x => x.ModifiedDate)
+            //    ;
 
             //builder
             //    .HasMany(x => x.UserRoles)
