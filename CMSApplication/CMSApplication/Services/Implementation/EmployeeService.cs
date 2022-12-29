@@ -1,4 +1,5 @@
-﻿using CMSApplication.Data;
+﻿using System.Text;
+using CMSApplication.Data;
 using CMSApplication.Data.Entity;
 using CMSApplication.Models.BindingModel;
 using CMSApplication.Models.DTO;
@@ -31,7 +32,8 @@ namespace CMSApplication.Services.Implementation
                         Email = item.Email,
                         UserName = item.Email,
                         EmailConfirmed = true,
-                        FullName = item.FirstName + " " + item.LastName
+                        FullName = item.FirstName + " " + item.LastName,
+                        NormalizedEmail = item.Email.Normalize(),
                     };
 
                     var result = await _userManager.CreateAsync(user, "123456789");
