@@ -68,6 +68,23 @@ builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("callng",
+        builder =>
+        {
+            builder
+                .WithOrigins("http://localhost:4200", "https://localhost:7046")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .SetPreflightMaxAge(TimeSpan.FromSeconds(2520));
+            //.AllowCredentials()
+            //.AllowAnyOrigin()
+
+            ;
+        });
+
+});
 
 
 builder.Services
@@ -93,8 +110,12 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+app.UseCors("callng");
+
 //app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().WithOrigins("http://localhost:4200"));
-app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowAnyOrigin());
-app.MapControllers();
+//app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowAnyOrigin());
+app.MapControllers()
+    .RequireCors("callng");
+;
 
 app.Run();

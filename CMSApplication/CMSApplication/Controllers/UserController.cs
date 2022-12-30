@@ -7,6 +7,7 @@ using CMSApplication.Models;
 using CMSApplication.Models.BindingModel;
 using CMSApplication.Models.DTO;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +20,7 @@ namespace CMSApplication.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
@@ -55,6 +57,7 @@ namespace CMSApplication.Controllers
         }
 
         [HttpPost("RegisterUser")]
+        [AllowAnonymous]
         public async Task<object> RegisterUser([FromBody] AddUserBindingModel model)
         {
             try
@@ -101,7 +104,7 @@ namespace CMSApplication.Controllers
         }
 
 
-
+        [AllowAnonymous]
         [HttpGet("GetAllUser")]
         public async Task<object> GetAllUser()
         {
@@ -123,7 +126,7 @@ namespace CMSApplication.Controllers
             }
         }
 
-
+        [AllowAnonymous]
         [HttpGet("GetUserList")]
         public async Task<object> GetUserList()
         {
@@ -180,6 +183,7 @@ namespace CMSApplication.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("GetRoles")]
         public async Task<object> GetRoles()
         {
@@ -195,6 +199,8 @@ namespace CMSApplication.Controllers
                 return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
             }
         }
+
+        [AllowAnonymous]
         [HttpPost("AddRole")]
         public async Task<object> AddRole([FromBody] AddRoleBindingModel model)
         {
