@@ -54,6 +54,13 @@ namespace CMSApplication.Controllers
                     email = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Email).FirstOrDefault();
                 
                 var user = await _userManager.FindByEmailAsync(email.Value);
+                if (user != null)
+                {
+                    var roles = await _userManager.GetRolesAsync(user);
+
+                    return new UserDTO(user.FullName, user.Email, user.UserName, user.CreatedDate, roles?.ToList());
+
+                }
                 return user;
             }
             catch (Exception ex)
