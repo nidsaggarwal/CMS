@@ -101,7 +101,7 @@ namespace CMSApplication.Services.Implementation
         {
             try
             {
-                return await _context.Quizzes.Where(x => x.active).ToListAsync();
+                return await _context.Quizzes.Where(x => x.active).Include(x=>x.Category).ToListAsync();
             }
             catch (Exception ex)
             {
