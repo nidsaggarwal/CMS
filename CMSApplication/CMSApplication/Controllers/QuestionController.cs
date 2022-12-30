@@ -72,7 +72,7 @@ namespace CMSApplication.Controllers
 
         }
 
-        [HttpGet("/quiz/{Id}")]
+        [HttpGet("/api/Question/{Id}")]
         public async Task<object> getQuestionsOfQuiz(long Id)
         {
             try
@@ -91,7 +91,7 @@ namespace CMSApplication.Controllers
 
         }
 
-        [HttpGet("/quiz/all/{qid}")]
+        [HttpGet("/api/Question/all/{qid}")]
         public async Task<object> getQuestionsOfQuizAdmin(long qid)
         {
             try
@@ -154,7 +154,7 @@ namespace CMSApplication.Controllers
 
         }
 
-        [HttpPost("/eval-quiz")]
+        [HttpPost("/api/Question/eval-quiz")]
         public async Task<object> evalQuiz(List<Question> questions)
         {
             try
