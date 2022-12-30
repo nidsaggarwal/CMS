@@ -74,7 +74,14 @@ namespace CMSApplication.Controllers
                 }
 
 
-                var user = new User() { FullName = model.FullName, Email = model.Email, UserName = model.Email, CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow };
+                var user = new User()
+                {
+                    FullName = model.FullName, 
+                    Email = model.Email, 
+                    UserName = model.Email, 
+                    CreatedDate = DateTime.UtcNow, 
+                    ModifiedDate = DateTime.UtcNow
+                };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
