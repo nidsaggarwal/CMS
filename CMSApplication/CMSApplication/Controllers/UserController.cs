@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
 using System.Security.Claims;
 using CMSApplication.Auth;
 using CMSApplication.Data.Entity;
@@ -42,11 +43,16 @@ namespace CMSApplication.Controllers
         }
 
         [HttpGet("current-user")]
+        [AllowAnonymous]
+
         public async Task<object> getCurrentUser()
         {
             try
             {
                 var email= HttpContext.User.Claims.Where(x => x.Type == "UserName").FirstOrDefault();
+                if (email == null)
+                    email = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Email).FirstOrDefault();
+                
                 var user = await _userManager.FindByEmailAsync(email.Value);
                 return user;
             }
