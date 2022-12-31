@@ -49,7 +49,7 @@ namespace CMSApplication.Services.Implementation
         {
             try
             {
-                return await _context.Quizzes.ToListAsync();
+                return await _context.Quizzes.Include(x=>x.Category).ToListAsync();
             }
             catch (Exception ex)
             {
