@@ -1,6 +1,7 @@
 ﻿using CMSApplication.Data.Entity;
 using CMSApplication.Enums;
 using CMSApplication.Models;
+using CMSApplication.Models.DTO;
 using CMSApplication.Services.Abstraction;
 using CMSApplication.Services.Implementation;
 using Microsoft.AspNetCore.Http;
@@ -29,12 +30,24 @@ namespace CMSApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<object> Post(Question question)
+        public async Task<object> Post(QuestionDTO questionDto)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    var question = new Question()
+                    {
+                        QuizID = questionDto.QuizID,
+                        answer = questionDto.answer,
+                        content = questionDto.content,
+                        image   = questionDto.image,
+                        option1 = questionDto.option1,
+                        option2 = questionDto.option2,
+                        option3 = questionDto.option3,
+                        option4 = questionDto.option4,
+                        givenAnswer = questionDto.givenAnswer,
+                    };
                     question = await _questionService.addQuestion(question);
 
                     return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", question));
@@ -51,12 +64,25 @@ namespace CMSApplication.Controllers
         }
 
         [HttpPut]
-        public async Task<object> put(Question question)
+        public async Task<object> put(QuestionDTO questionDto)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    var question = new Question()
+                    {
+                        Id = questionDto.Id,
+                        QuizID = questionDto.QuizID,
+                        answer = questionDto.answer,
+                        content = questionDto.content,
+                        image = questionDto.image,
+                        option1 = questionDto.option1,
+                        option2 = questionDto.option2,
+                        option3 = questionDto.option3,
+                        option4 = questionDto.option4,
+                        givenAnswer = questionDto.givenAnswer,
+                    };
                     question = await _questionService.updateQuestion(question);
 
                     return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", question));
@@ -71,66 +97,6 @@ namespace CMSApplication.Controllers
             }
 
         }
-
-        [HttpGet("/api/Question/{Id}")]
-        public async Task<object> getQuestionsOfQuiz(long Id)
-        {
-            try
-            {
-
-                var item = await _questionService.getQuestionsOfQuiz(new Quiz(){Id = Id});
-
-                return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", item));
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
-            }
-
-        }
-
-        [HttpGet("/api/Question/all/{qid}")]
-        public async Task<object> getQuestionsOfQuizAdmin(long qid)
-        {
-            try
-            {
-
-                var item = await _questionService.getQuestionsOfQuiz(new Quiz() { Id = qid });
-
-                return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", item));
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
-            }
-
-        }
-
-        [HttpGet("/{quesId}")]
-        public async Task<object> get(long quesId)
-        {
-            try
-            {
-
-                var item = await _questionService.getQuestion(quesId);
-
-                return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", item));
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
-            }
-
-
-
-        }
-
 
         [HttpDelete("{Id}")]
         public async Task<object> Delete(long Id)
@@ -154,8 +120,47 @@ namespace CMSApplication.Controllers
 
         }
 
+        [HttpGet("/api/Question/{qid}")]
+        public async Task<object> getQuestionsOfQuiz(long qid)
+        {
+            try
+            {
+                var item = await _questionService.getQuestion(qid);
+
+                //var item = await _questionService.getQuestionsOfQuiz(new Quiz(){Id = Id});
+
+                return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", item));
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
+            }
+
+        }
+
+        [HttpGet("/api/Question/quiz/{qid}")]
+        public async Task<object> getQuestionsOfQuizAdmin(long qid)
+        {
+            try
+            {
+
+                var item = await _questionService.getQuestionsOfQuiz(new Quiz() { Id = qid });
+
+                return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", item));
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
+            }
+
+        }
+
         [HttpPost("/api/Question/eval-quiz")]
-        public async Task<object> evalQuiz(List<Question> questions)
+        public async Task<object> evalQuiz(List<QuestionDTO> questions)
         {
             try
             {
@@ -165,19 +170,19 @@ namespace CMSApplication.Controllers
 
                 foreach (var item in questions)
                 {
-                    var question = await _questionService.getQuestion(item.QuizID);
-                    var quiz = await _quizService.addQuiz(new Quiz(){ Id = question.QuizID } );
+                    var question = await _questionService.getQuestion(item.Id);
+                    var quiz = await _quizService.getQuiz(question.QuizID);
 
-                    if (question.answer.Equals(question.givenAnswer))
+                    if (question.answer.Equals(item.givenAnswer))
                     {
                         correctAnswers++;
 
-                        double marksSingle = double.Parse(quiz.maxMarks) / questions.Count; 
+                        double marksSingle = double.Parse(quiz.maxMarks) / questions.Count;
                         marksGot += marksSingle;
 
                     }
 
-                    if (question.givenAnswer != null)
+                    if (item.givenAnswer != null)
                     {
                         attempted++;
                     }
@@ -199,6 +204,30 @@ namespace CMSApplication.Controllers
             }
 
         }
+
+
+        //[HttpGet("/{quesId}")]
+        //public async Task<object> get(long quesId)
+        //{
+        //    try
+        //    {
+
+        //        var item = await _questionService.getQuestions();
+
+        //        return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", item));
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, ex.Message);
+        //        return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
+        //    }
+
+
+
+        //}
+
+
 
 
     }
