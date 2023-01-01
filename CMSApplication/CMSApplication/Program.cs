@@ -74,6 +74,7 @@ builder.Services.AddSingleton<IFileService, FileService>();
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 
 builder.Services.AddCors(opt =>
 {
@@ -85,12 +86,7 @@ builder.Services.AddCors(opt =>
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .SetPreflightMaxAge(TimeSpan.FromSeconds(2520));
-            //.AllowCredentials()
-            //.AllowAnyOrigin()
-
-            ;
         });
-
 });
 
 

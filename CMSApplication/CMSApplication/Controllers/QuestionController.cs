@@ -205,30 +205,5 @@ namespace CMSApplication.Controllers
 
         }
 
-
-        //[HttpGet("/{quesId}")]
-        //public async Task<object> get(long quesId)
-        //{
-        //    try
-        //    {
-
-        //        var item = await _questionService.getQuestions();
-
-        //        return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", item));
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, ex.Message);
-        //        return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
-        //    }
-
-
-
-        //}
-
-
-
-
     }
 }
