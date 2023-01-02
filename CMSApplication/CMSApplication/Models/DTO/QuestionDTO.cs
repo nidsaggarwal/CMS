@@ -5,7 +5,7 @@
         public long Id { get; set; }
         public string content { get; set; }
 
-        public string image { get; set; }
+        public string? image { get; set; }
 
         public string option1 { get; set; }
         public string option2 { get; set; }
@@ -15,7 +15,7 @@
 
         public string answer { get; set; }
 
-        public string givenAnswer { get; set; }
+        public string? givenAnswer { get; set; }
 
         public long QuizID { get; set; }
     }
