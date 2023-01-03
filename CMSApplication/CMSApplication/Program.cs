@@ -70,11 +70,12 @@ builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddSingleton<IExcelService, ExcelService>();
-builder.Services.AddSingleton<IFileService, FileService>(); 
-builder.Services.AddScoped<IQuizService, QuizService>();
+builder.Services.AddSingleton<IFileService,  FileService>(); 
+builder.Services.AddScoped<IQuizService,     QuizService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+builder.Services.AddScoped<IScoreService,    ScoreService>();
 
 builder.Services.AddCors(opt =>
 {
