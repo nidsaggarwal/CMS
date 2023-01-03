@@ -53,7 +53,15 @@ namespace CMSApplication.Controllers
                     return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", question));
                 }
 
-                return await Task.FromResult(new ResponseModel(ResponseCode.Error, null, null));
+                return await Task.FromResult
+                (
+                    new ResponseModel
+                    (
+                        ResponseCode.Error,
+                        null,
+                        ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)
+                    )
+                );
             }
             catch (Exception ex)
             {
@@ -85,7 +93,15 @@ namespace CMSApplication.Controllers
                     };
                     question = await _questionService.updateQuestion(question);
 
-                    return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", question));
+                    return await Task.FromResult
+                    (
+                        new ResponseModel
+                        (
+                            ResponseCode.Error,
+                            null,
+                            ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)
+                        )
+                    );
                 }
 
                 return await Task.FromResult(new ResponseModel(ResponseCode.Error, null, null));

@@ -16,8 +16,9 @@ namespace CMSApplication.Data.Entity
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
 
-        public ICollection<UserRole> UserRoles { get; set; }
+        public ICollection<UserRole>    UserRoles   { get; set; }
+        public ICollection<Scores>      UserScores  { get; set; }
 
-        public Employee Employee { get; set; }
+        public Employee     Employee { get; set; }
     }
 }

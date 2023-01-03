@@ -35,7 +35,15 @@ namespace CMSApplication.Controllers
                     return await Task.FromResult(new ResponseModel(ResponseCode.OK, "", category));
                 }
 
-                return await Task.FromResult(new ResponseModel(ResponseCode.Error, null, null));
+                return await Task.FromResult
+                    (
+                        new ResponseModel
+                        (
+                            ResponseCode.Error, 
+                            null, 
+                            ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)
+                        )
+                    );
             }
             catch (Exception ex)
             {
